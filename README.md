@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Vidhya ES — Aspiring AI/ML Engineer
 
-## Getting Started
+**Computer Vision | Healthcare NLP | Robotics | Production-ready ML Systems**
 
-First, run the development server:
+Building intelligent vision systems that turn pixels into real-world impact.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+![Hero Preview](public/profile.jpg)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Featured Projects
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Object Segmentation for Semi-Humanoid Robots** — YOLOv8 + SAM (iHub Robotics Internship)
+- **Medical Prescription Digitization System** — TrOCR + BioClinicalBERT (Ongoing)
+- **Drug Interaction Detector** — Real-time safety alerts with Streamlit
+- **SCANOVA** — Smart supermarket self-checkout with TensorFlow
+- **Study Buddy** — Google Gemini powered AI learning assistant
+- **PLACIFY** — SVM job matching with 89% accuracy
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🛠️ Tech Stack
 
-## Learn More
+**Core**: Python, PyTorch, TensorFlow, YOLOv8, SAM, BioClinicalBERT  
+**Vision**: OpenCV, Roboflow, TrOCR  
+**NLP & Deployment**: Hugging Face, spaCy, Streamlit, Docker  
+**Others**: React/Next.js, Scikit-learn, SQL, Flask
 
-To learn more about Next.js, take a look at the following resources:
+## 📄 Resume
+[Download CV](https://github.com/VidhyaES/vidhya-es-portfolio/blob/main/public/resume.pdf)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🌐 Live Demo
+(Coming soon on Vercel — link will be here)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Open to Computer Vision / AI/ML Engineer roles (India & Remote)**  
+📧 vidhyavidhu088@gmail.com | [LinkedIn](https://linkedin.com/in/vidhya-es-9946ufg) | [GitHub](https://github.com/VidhyaES)
