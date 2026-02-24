@@ -4,8 +4,6 @@
 
 Building intelligent vision systems that turn pixels into real-world impact.
 
-![Hero Preview](public/profile.jpg)
-
 ## 🚀 Featured Projects
 
 - **Object Segmentation for Semi-Humanoid Robots** — YOLOv8 + SAM (iHub Robotics Internship)
