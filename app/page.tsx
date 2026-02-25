@@ -3,16 +3,17 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
 import { ArrowRight, Download, Github, Linkedin, Mail, ExternalLink, ChevronDown, Zap, Brain, Eye, Code2 } from 'lucide-react';
 
+// ✅ FIXED MOTION CONSTANTS (Next.js 16 + Framer Motion compatible)
 const fadeUp = {
   initial: { opacity: 0, y: 30 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true },
-  transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] },
+  transition: { duration: 0.6, ease: "easeOut" as const },
 };
 
 const stagger = (i: number) => ({
   ...fadeUp,
-  transition: { duration: 0.6, delay: i * 0.08, ease: [0.25, 0.46, 0.45, 0.94] },
+  transition: { duration: 0.6, delay: i * 0.08, ease: "easeOut" as const },
 });
 
 // ── Typing animation hook ────────────────────────────────────────────────────
