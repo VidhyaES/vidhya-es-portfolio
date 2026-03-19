@@ -21,10 +21,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <span className="text-sm text-gray-400">Vidhya ES</span>
             </div>
 
-            <div className="hidden md:flex gap-10 text-sm font-medium">
+            <div className="hidden md:flex gap-8 text-sm font-medium">
               <a href="#about" className="hover:text-cyan-400 transition">About</a>
               <a href="#skills" className="hover:text-cyan-400 transition">Skills</a>
               <a href="#projects" className="hover:text-cyan-400 transition">Projects</a>
+              <a href="#blogs" className="hover:text-cyan-400 transition">Blogs</a>
               <a href="#experience" className="hover:text-cyan-400 transition">Experience</a>
               <a href="#education" className="hover:text-cyan-400 transition">Education</a>
             </div>

@@ -1,55 +1,51 @@
 'use client';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
-import { ArrowRight, Download, Github, Linkedin, Mail, ExternalLink, ChevronDown, Zap, Brain, Eye, Code2 } from 'lucide-react';
+import {
+  ArrowRight, Download, Github, Linkedin, Mail, ExternalLink,
+  ChevronDown, Zap, Brain, Eye, Code2, BookOpen, ArrowUpRight,
+  Globe, Shield, ShoppingCart, GraduationCap, Cpu, Heart,
+  MapPin, Microscope
+} from 'lucide-react';
 
-// ✅ FIXED MOTION CONSTANTS (Next.js 16 + Framer Motion compatible)
+// ── Motion presets ────────────────────────────────────────────────────────────
 const fadeUp = {
   initial: { opacity: 0, y: 30 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true },
-  transition: { duration: 0.6, ease: "easeOut" as const },
+  transition: { duration: 0.6, ease: 'easeOut' as const },
 };
-
 const stagger = (i: number) => ({
   ...fadeUp,
-  transition: { duration: 0.6, delay: i * 0.08, ease: "easeOut" as const },
+  transition: { duration: 0.6, delay: i * 0.08, ease: 'easeOut' as const },
 });
 
-// ── Typing animation hook ────────────────────────────────────────────────────
+// ── Typewriter ─────────────────────────────────────────────────────────────
 function useTypewriter(words: string[], speed = 80, pause = 2000) {
   const [text, setText] = useState('');
   const [wordIdx, setWordIdx] = useState(0);
   const [deleting, setDeleting] = useState(false);
-
   useEffect(() => {
     const current = words[wordIdx];
     const timeout = setTimeout(() => {
       if (!deleting) {
         setText(current.slice(0, text.length + 1));
-        if (text.length + 1 === current.length) {
-          setTimeout(() => setDeleting(true), pause);
-        }
+        if (text.length + 1 === current.length) setTimeout(() => setDeleting(true), pause);
       } else {
         setText(current.slice(0, text.length - 1));
-        if (text.length === 0) {
-          setDeleting(false);
-          setWordIdx((i) => (i + 1) % words.length);
-        }
+        if (text.length === 0) { setDeleting(false); setWordIdx(i => (i + 1) % words.length); }
       }
     }, deleting ? speed / 2 : speed);
     return () => clearTimeout(timeout);
   }, [text, deleting, wordIdx, words, speed, pause]);
-
   return text;
 }
 
-// ── Stat counter ─────────────────────────────────────────────────────────────
+// ── Stat counter ──────────────────────────────────────────────────────────────
 function StatCard({ value, label, suffix = '%' }: { value: number; label: string; suffix?: string }) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
   const [started, setStarted] = useState(false);
-
   useEffect(() => {
     const observer = new IntersectionObserver(([e]) => {
       if (e.isIntersecting && !started) {
@@ -66,31 +62,33 @@ function StatCard({ value, label, suffix = '%' }: { value: number; label: string
     if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
   }, [value, started]);
-
   return (
     <div ref={ref} className="text-center">
-      <div className="text-5xl font-black text-white tabular-nums">
-        {count}<span className="text-cyan-400">{suffix}</span>
-      </div>
+      <div className="text-5xl font-black text-white tabular-nums">{count}<span className="text-cyan-400">{suffix}</span></div>
       <div className="text-sm text-gray-400 mt-1 max-w-[120px] mx-auto">{label}</div>
     </div>
   );
 }
 
-// ── Download CV helper (fixes the backslash bug in original) ─────────────────
 function downloadCV() {
   const link = document.createElement('a');
-  link.href = '/resume.pdf';          // forward slash — critical fix
+  link.href = '/resume.pdf';
   link.download = 'Vidhya_ES_Resume.pdf';
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
 }
 
-// ── Smooth scroll helper ──────────────────────────────────────────────────────
 function scrollTo(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
+
+// ── Medium icon (not in lucide) ───────────────────────────────────────────────
+const MediumIcon = () => (
+  <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
+    <path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z" />
+  </svg>
+);
 
 // ─────────────────────────────────────────────────────────────────────────────
 export default function Portfolio() {
@@ -98,68 +96,241 @@ export default function Portfolio() {
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
   const heroY = useTransform(scrollYProgress, [0, 1], [0, 80]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  const [activeFilter, setActiveFilter] = useState('All');
 
   const typed = useTypewriter(['Computer Vision', 'AI/ML Engineering', 'NLP & Healthcare AI', 'Robotics Vision']);
 
   const skills = [
     { cat: 'Programming', icon: <Code2 className="w-5 h-5" />, color: 'cyan', items: ['Python', 'Java', 'SQL', 'C'] },
     { cat: 'Machine Learning', icon: <Brain className="w-5 h-5" />, color: 'purple', items: ['Scikit-learn', 'Random Forest', 'SVM', 'Feature Engineering', 'Classification', 'Regression'] },
-    { cat: 'Deep Learning', icon: <Zap className="w-5 h-5" />, color: 'cyan', items: ['PyTorch', 'TensorFlow', 'YOLOv8', 'CNNs', 'Transfer Learning'] },
-    { cat: 'Computer Vision', icon: <Eye className="w-5 h-5" />, color: 'purple', items: ['OpenCV', 'SAM', 'COCO', 'Roboflow', 'OCR', 'TrOCR'] },
-    { cat: 'NLP', icon: <Brain className="w-5 h-5" />, color: 'cyan', items: ['BERT', 'BioClinicalBERT', 'spaCy', 'Hugging Face'] },
-    { cat: 'Deployment', icon: <Code2 className="w-5 h-5" />, color: 'purple', items: ['Django', 'Flask', 'Docker', 'Firebase', 'Git', 'Streamlit'] },
+    { cat: 'Deep Learning', icon: <Zap className="w-5 h-5" />, color: 'cyan', items: ['PyTorch', 'TensorFlow', 'YOLOv8', 'CNNs', 'Transfer Learning', 'EfficientNet'] },
+    { cat: 'Computer Vision', icon: <Eye className="w-5 h-5" />, color: 'purple', items: ['OpenCV', 'SAM', 'COCO', 'Roboflow', 'OCR', 'TrOCR', 'Grad-CAM'] },
+    { cat: 'NLP & LLMs', icon: <Brain className="w-5 h-5" />, color: 'cyan', items: ['BERT', 'BioClinicalBERT', 'spaCy', 'Hugging Face', 'Groq', 'LLaMA', 'Gemini API'] },
+    { cat: 'Deployment', icon: <Code2 className="w-5 h-5" />, color: 'purple', items: ['FastAPI', 'Flask', 'Django', 'React', 'Docker', 'Render', 'Streamlit'] },
   ];
 
   const projects = [
     {
-      tag: 'Computer Vision • Robotics',
+      tag: 'Computer Vision • Retail',
+      filter: 'Computer Vision',
       color: 'cyan',
+      icon: <ShoppingCart className="w-5 h-5" />,
+      title: 'RetailSense – AI Retail Analytics',
+      desc: 'Real-time retail analytics platform using computer vision to track customer footfall, heatmap generation, shelf monitoring, and behavior analysis for smart stores.',
+      stack: ['YOLOv8', 'OpenCV', 'Python', 'Flask', 'React'],
+      metric: 'Real-time',
+      github: 'https://github.com/VidhyaES',
+      live: '',
+      featured: true,
+    },
+    {
+      tag: 'Computer Vision • Robotics',
+      filter: 'Computer Vision',
+      color: 'cyan',
+      icon: <Cpu className="w-5 h-5" />,
       title: 'Object Segmentation for Semi-Humanoid Robots',
       desc: 'Real-time instance segmentation pipeline for robotic grasping using YOLOv8 + SAM. Achieved 15% higher accuracy and 20% lower inference latency on 3,000+ annotated images.',
       stack: ['YOLOv8', 'SAM', 'Roboflow', 'PyTorch'],
       metric: '15% ↑ accuracy',
+      github: 'https://github.com/VidhyaES/robot-object-segmentation-yolo-sam',
+      live: '',
+      featured: true,
     },
     {
-      tag: 'OCR • NLP • Healthcare',
+      tag: 'LLM • Document Security',
+      filter: 'LLM',
       color: 'purple',
-      title: 'Medical Prescription Digitization',
-      desc: 'End-to-end OCR + NLP system extracting and digitizing printed/handwritten prescriptions with 90% accuracy using TrOCR + OpenCV. Deployed via Streamlit.',
-      stack: ['OpenCV', 'TrOCR', 'BioClinicalBERT', 'Streamlit'],
-      metric: '90% accuracy',
+      icon: <Shield className="w-5 h-5" />,
+      title: 'DocuGuard AI – ID Forgery Detection',
+      desc: 'FastAPI + Groq (Llama 4 Scout 17B) forensic analysis system evaluating 8 dimensions of ID document authenticity. Outputs structured verdict with risk score 0–100. Live on Render.',
+      stack: ['FastAPI', 'Groq Vision', 'LLaMA 4 Scout', 'Python', 'Render'],
+      metric: '8-axis forensics',
+      github: 'https://github.com/VidhyaES/DocuGuardAI',
+      live: 'https://docuguardai.onrender.com',
+      featured: true,
     },
     {
       tag: 'NLP • Healthcare',
+      filter: 'Healthcare AI',
       color: 'cyan',
+      icon: <Heart className="w-5 h-5" />,
+      title: 'MedTriage AI – Healthcare Triage System',
+      desc: 'Full-stack healthcare triage engine: spaCy NLP symptom extraction → RandomForestClassifier (300 trees, 15 disease classes, ~92% CV accuracy) → risk-stratified output (low/moderate/high/urgent).',
+      stack: ['spaCy', 'scikit-learn', 'Flask', 'React', 'Vite'],
+      metric: '92% CV accuracy',
+      github: 'https://github.com/VidhyaES/medtriage-ai',
+      live: '',
+      featured: false,
+    },
+    {
+      tag: 'OCR • NLP • Healthcare',
+      filter: 'Healthcare AI',
+      color: 'cyan',
+      icon: <Microscope className="w-5 h-5" />,
+      title: 'PrescriptionGuard AI',
+      desc: 'OCR-based medicine extraction and drug interaction checker. Flask backend, Docker containerized, deployed on Render. Generates structured medication safety reports.',
+      stack: ['Flask', 'Docker', 'Render', 'Python', 'OCR'],
+      metric: 'Deployed',
+      github: 'https://github.com/VidhyaES/PrescriptionGuard-AI',
+      live: '',
+      featured: false,
+    },
+    {
+      tag: 'Computer Vision • Medical',
+      filter: 'Healthcare AI',
+      color: 'purple',
+      icon: <Eye className="w-5 h-5" />,
+      title: 'Diabetic Retinopathy Detection',
+      desc: 'EfficientNet-B0 + ResNet50 ensemble for retinal disease detection. Grad-CAM explainability for clinical transparency. AUC-ROC 0.91.',
+      stack: ['EfficientNet-B0', 'ResNet50', 'Grad-CAM', 'PyTorch'],
+      metric: 'AUC-ROC 0.91',
+      github: 'https://github.com/VidhyaES/diabetic-retinopathy-5class-ensemble',
+      live: '',
+      featured: false,
+    },
+    {
+      tag: 'NLP • Healthcare Safety',
+      filter: 'Healthcare AI',
+      color: 'cyan',
+      icon: <Brain className="w-5 h-5" />,
       title: 'Drug Interaction Detector',
-      desc: 'Real-time drug-drug interaction checker using BioClinicalBERT & vector search. spaCy NER with knowledge base queries for clinical safety alerts. 88% accuracy.',
+      desc: 'Real-time drug-drug interaction checker using BioClinicalBERT & vector search. spaCy NER with knowledge-base queries for clinical safety alerts. 88% accuracy.',
       stack: ['BioClinicalBERT', 'spaCy', 'Hugging Face', 'Streamlit'],
       metric: '88% accuracy',
+      github: 'https://github.com/VidhyaES/drug-interaction-detector-nlp',
+      live: '',
+      featured: false,
     },
     {
       tag: 'Computer Vision • Retail',
+      filter: 'Computer Vision',
       color: 'purple',
+      icon: <ShoppingCart className="w-5 h-5" />,
       title: 'SCANOVA: Smart Self-Checkout',
-      desc: 'Real-time fruit/vegetable detection via webcam using TensorFlow. Full-stack React + Flask backend supporting 36+ product classes.',
+      desc: 'Real-time fruit/vegetable detection via webcam using TensorFlow. Full-stack React + Flask supporting 36+ product classes with automated billing.',
       stack: ['TensorFlow', 'React', 'Flask', 'OpenCV'],
       metric: '36+ classes',
+      github: 'https://github.com/VidhyaES/SCANOVA-ai-self-checkout',
+      live: '',
+      featured: false,
+    },
+    {
+      tag: 'ML • Predictive Analytics',
+      filter: 'ML',
+      color: 'purple',
+      icon: <Zap className="w-5 h-5" />,
+      title: 'NAPALYZE – Sleep Quality Prediction',
+      desc: 'Machine learning pipeline predicting sleep quality using behavioral and health features via Random Forest with feature importance visualization.',
+      stack: ['Random Forest', 'scikit-learn', 'Python', 'Pandas'],
+      metric: 'Predictive ML',
+      github: 'https://github.com/VidhyaES/NapAlyze-ML-Project-for-testing-sleep-quality',
+      live: '',
+      featured: false,
+    },
+    {
+      tag: 'ML • Placement',
+      filter: 'ML',
+      color: 'purple',
+      icon: <GraduationCap className="w-5 h-5" />,
+      title: 'PLACIFY: AI Campus Recruitment',
+      desc: 'SVM-based job matching engine achieving 89% accuracy. Increased placement efficiency by 35% through intelligent candidate-role matching.',
+      stack: ['SVM', 'Python', 'SQL', 'scikit-learn'],
+      metric: '89% accuracy',
+      github: 'https://github.com/VidhyaES/PLACIFY-Campus-Recruitment-Application',
+      live: '',
+      featured: false,
     },
     {
       tag: 'LLM • Education',
+      filter: 'LLM',
       color: 'cyan',
+      icon: <BookOpen className="w-5 h-5" />,
       title: 'Study Buddy: AI Learning Assistant',
-      desc: 'Streamlit app powered by Google Gemini API generating MCQs, flashcards & explanations. JSON-based session history with polished custom UI.',
+      desc: 'Streamlit app powered by Google Gemini API generating MCQs, flashcards & explanations from study material with JSON session history.',
       stack: ['Google Gemini', 'Streamlit', 'Python', 'JSON'],
       metric: 'LLM powered',
+      github: 'https://github.com/VidhyaES/study-buddy-ai-learning-assistant',
+      live: '',
+      featured: false,
     },
     {
-      tag: 'Machine Learning • Placement',
+      tag: 'LLM • Medical Records',
+      filter: 'LLM',
       color: 'purple',
-      title: 'PLACIFY: AI Campus Recruitment',
-      desc: 'SVM-based job matching engine achieving 89% accuracy. Increased placement efficiency by 35% through intelligent candidate-role matching.',
-      stack: ['SVM', 'Python', 'SQL', 'Scikit-learn'],
-      metric: '89% accuracy',
+      icon: <Heart className="w-5 h-5" />,
+      title: 'Medical Prescription Digitization',
+      desc: 'LLM-powered pipeline converting unstructured prescription text into structured JSON medical records via prompt engineering and TrOCR.',
+      stack: ['TrOCR', 'OpenCV', 'BioClinicalBERT', 'Streamlit'],
+      metric: '90% accuracy',
+      github: 'https://github.com/VidhyaES/prescription-digitization-ocr-nlp',
+      live: '',
+      featured: false,
+    },
+    {
+      tag: 'LLM • Travel',
+      filter: 'LLM',
+      color: 'cyan',
+      icon: <MapPin className="w-5 h-5" />,
+      title: 'TREKTALE: AI Travel Companion',
+      desc: 'AI-powered travel planning assistant recommending personalized itineraries, routes, and hidden local gems via LLM reasoning and API integration.',
+      stack: ['LLM', 'Flutter', 'REST APIs', 'Python'],
+      metric: 'AI Planner',
+      github: 'https://github.com/VidhyaES/trektale-travel-companion-flutter',
+      live: '',
+      featured: false,
     },
   ];
+
+  const blogs = [
+    {
+      title: 'From "You Only Look Once" to YOLO26: The Complete Story of the World\'s Fastest Object Detector',
+      subtitle: 'A beginner-friendly guide to how YOLO evolved from a bold 2015 idea into the most powerful real-time vision model of 2025.',
+      date: 'Mar 2026',
+      tag: 'Computer Vision',
+      color: 'cyan',
+      url: 'https://medium.com/@VidhyaES/from-you-only-look-once-to-yolo26-the-complete-story-of-the-worlds-fastest-object-detector-b23529401ffe',
+    },
+    {
+      title: 'Python 3.14 Is Here: What\'s New, Why It Matters, and Should You Upgrade?',
+      subtitle: 'Deep dive into the October 2025 Python release — new language features, performance gains, and whether you should make the jump.',
+      date: 'Oct 2025',
+      tag: 'Python',
+      color: 'purple',
+      url: 'https://medium.com/@VidhyaES/python-3-14-is-here-whats-new-why-it-matters-and-should-you-upgrade-ae209ddad5fe',
+    },
+    {
+      title: 'Exploring the Orbbec Femto Bolt: A Deep Dive into 3D Vision Technology for Object Detection',
+      subtitle: 'First-hand experience using the Orbbec Femto Bolt depth camera for a real-world 3D object detection project.',
+      date: 'Feb 2026',
+      tag: 'Robotics',
+      color: 'cyan',
+      url: 'https://medium.com/@VidhyaES/exploring-the-orbbec-femto-bolt-a-deep-dive-into-3d-vision-technology-for-object-detection-0c9a27efe6e9',
+    },
+    {
+      title: 'When AI Meets Muscle: The Promise of Intelligent Exoskeletons',
+      subtitle: 'From sci-fi to reality — how AI-driven exoskeletons are helping workers lift smarter and patients walk again.',
+      date: 'Sep 2025',
+      tag: 'Robotics AI',
+      color: 'purple',
+      url: 'https://medium.com/@VidhyaES/when-ai-meets-muscle-the-promise-of-intelligent-exoskeletons-3b5a29779973',
+    },
+    {
+      title: 'Solving the BSOD Crisis in the Age of AI: How Smarter Endpoint Protection Could Have Saved 2024',
+      subtitle: 'Exploring how AI-powered endpoint protection could have prevented the catastrophic 2024 CrowdStrike outage.',
+      date: 'Aug 2025',
+      tag: 'AI Security',
+      color: 'purple',
+      url: 'https://medium.com/@VidhyaES/-solving-the-bsod-crisis-in-the-age-of-ai-how-smarter-endpoint-protection-could-have-saved-2024-0a3716a62c08',
+    },
+  ];
+
+  const filters = ['All', 'Computer Vision', 'Healthcare AI', 'LLM', 'ML'];
+  const filteredProjects = activeFilter === 'All' ? projects : projects.filter(p => p.filter === activeFilter);
+
+  const colorMap: Record<string, { border: string; hoverBorder: string; tag: string; badge: string; link: string; glow: string }> = {
+    cyan:   { border: 'border-cyan-500/10',   hoverBorder: 'hover:border-cyan-500/40',   tag: 'text-cyan-400',   badge: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20',   link: 'group-hover:text-cyan-400',   glow: 'hover:shadow-[0_0_30px_rgba(34,211,238,0.1)]' },
+    purple: { border: 'border-purple-500/10', hoverBorder: 'hover:border-purple-500/40', tag: 'text-purple-400', badge: 'bg-purple-500/10 text-purple-400 border-purple-500/20', link: 'group-hover:text-purple-400', glow: 'hover:shadow-[0_0_30px_rgba(168,85,247,0.1)]' },
+  };
 
   return (
     <main className="overflow-hidden bg-[#080810] text-white" style={{ fontFamily: "'DM Sans', sans-serif" }}>
@@ -168,101 +339,63 @@ export default function Portfolio() {
         .display { font-family: 'Space Grotesk', sans-serif; }
         .cursor::after { content: '|'; animation: blink 1s step-end infinite; color: #22d3ee; }
         @keyframes blink { 0%,100% { opacity:1 } 50% { opacity:0 } }
-        .glow-cyan { box-shadow: 0 0 40px rgba(34,211,238,0.15); }
-        .glow-purple { box-shadow: 0 0 40px rgba(168,85,247,0.15); }
         .card-hover { transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease; }
         .card-hover:hover { transform: translateY(-4px); }
         .noise { background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"); }
         ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-track { background: #080810; } ::-webkit-scrollbar-thumb { background: #22d3ee40; border-radius: 2px; }
+        .blog-card-hover { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .blog-card-hover:hover { transform: translateY(-3px); }
+        .filter-btn { transition: all 0.2s ease; }
       `}</style>
 
       {/* ── HERO ──────────────────────────────────────────────────────────────── */}
       <section ref={heroRef} className="min-h-screen flex items-center relative pt-24 pb-16">
-        {/* Grid background */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(34,211,238,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(34,211,238,0.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
-        {/* Radial glow */}
         <div className="absolute top-1/4 right-1/3 w-[600px] h-[600px] bg-cyan-500/5 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-1/4 left-1/4 w-[400px] h-[400px] bg-purple-500/5 rounded-full blur-[100px] pointer-events-none" />
-        {/* Noise overlay */}
         <div className="absolute inset-0 noise pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 lg:gap-24 items-center w-full">
           {/* LEFT */}
           <motion.div style={{ y: heroY, opacity: heroOpacity }} className="space-y-8 z-10">
-            {/* Badge */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cyan-500/30 bg-cyan-500/5 text-sm text-cyan-400"
-            >
+            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cyan-500/30 bg-cyan-500/5 text-sm text-cyan-400">
               <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
               Open to Computer Vision Roles
             </motion.div>
 
-            {/* Name */}
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.1 }}
-              className="display text-6xl lg:text-7xl font-black tracking-tight leading-tight"
-            >
+            <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }}
+              className="display text-6xl lg:text-7xl font-black tracking-tight leading-tight">
               Vidhya{' '}
               <span className="bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">ES</span>
             </motion.h1>
 
-            {/* Typewriter */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3 }}
-              className="text-2xl text-gray-300 font-medium h-8"
-            >
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}
+              className="text-2xl text-gray-300 font-medium h-8">
               <span className="cursor">{typed}</span>
             </motion.div>
 
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              className="text-lg text-gray-400 max-w-lg leading-relaxed"
-            >
+            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}
+              className="text-lg text-gray-400 max-w-lg leading-relaxed">
               Building vision systems that turn pixels into intelligence — object detection, segmentation, and real-time analytics for robotics & healthcare.
             </motion.p>
 
-            {/* CTA Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="flex flex-wrap gap-4"
-            >
-              {/* ✅ FIXED: View Projects — scrolls to #projects */}
-              <button
-                onClick={() => scrollTo('projects')}
-                className="group flex items-center gap-3 px-8 py-4 bg-white text-black rounded-2xl font-semibold hover:bg-cyan-400 transition-all duration-200 hover:scale-105 active:scale-100"
-              >
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
+              className="flex flex-wrap gap-4">
+              <button onClick={() => scrollTo('projects')}
+                className="group flex items-center gap-3 px-8 py-4 bg-white text-black rounded-2xl font-semibold hover:bg-cyan-400 transition-all duration-200 hover:scale-105 active:scale-100">
                 View Projects
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
-
-              {/* ✅ FIXED: Download CV — uses forward slash + proper link */}
-              <button
-                onClick={downloadCV}
-                className="group flex items-center gap-3 px-8 py-4 border border-white/20 hover:border-cyan-400 rounded-2xl font-semibold transition-all duration-200 hover:scale-105 active:scale-100 hover:bg-white/5"
-              >
+              <button onClick={downloadCV}
+                className="group flex items-center gap-3 px-8 py-4 border border-white/20 hover:border-cyan-400 rounded-2xl font-semibold transition-all duration-200 hover:scale-105 active:scale-100 hover:bg-white/5">
                 Download CV
                 <Download className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
               </button>
             </motion.div>
 
-            {/* Social row */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
-              className="flex items-center gap-4 pt-2"
-            >
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}
+              className="flex items-center gap-4 pt-2">
               <a href="mailto:vidhyavidhu088@gmail.com" className="p-3 rounded-xl border border-white/10 hover:border-cyan-400/50 hover:bg-white/5 transition-all" aria-label="Email">
                 <Mail className="w-5 h-5 text-gray-400 hover:text-cyan-400 transition-colors" />
               </a>
@@ -272,56 +405,41 @@ export default function Portfolio() {
               <a href="https://github.com/VidhyaES" target="_blank" rel="noreferrer" className="p-3 rounded-xl border border-white/10 hover:border-cyan-400/50 hover:bg-white/5 transition-all" aria-label="GitHub">
                 <Github className="w-5 h-5 text-gray-400 hover:text-cyan-400 transition-colors" />
               </a>
+              <a href="https://medium.com/@VidhyaES" target="_blank" rel="noreferrer" className="p-3 rounded-xl border border-white/10 hover:border-cyan-400/50 hover:bg-white/5 transition-all" aria-label="Medium">
+                <MediumIcon />
+              </a>
               <span className="text-gray-600 text-sm ml-2">vidhyavidhu088@gmail.com</span>
             </motion.div>
           </motion.div>
 
           {/* RIGHT — Profile photo */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative flex justify-center lg:justify-end z-10"
-          >
-            {/* Decorative rings */}
+          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.2 }}
+            className="relative flex justify-center lg:justify-end z-10">
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div className="w-[420px] h-[420px] rounded-full border border-cyan-500/10 animate-[spin_20s_linear_infinite]" />
               <div className="absolute w-[360px] h-[360px] rounded-full border border-purple-500/10 animate-[spin_15s_linear_infinite_reverse]" />
             </div>
-
-            {/* Photo + chips wrapper — overflow visible so chips show outside image */}
             <div className="relative mx-12">
-              {/* Glow behind photo */}
-              <div className="absolute -inset-4 bg-gradient-to-br from-cyan-500/20 to-purple-500/20 rounded-[2rem] blur-2xl" />
-              <img
-                src="/profile.jpg"
-                alt="Vidhya ES — AI/ML Engineer"
-                className="relative w-full max-w-sm lg:max-w-md rounded-[2rem] shadow-2xl border border-white/10 object-cover z-10"
-              />
-              {/* Floating stat chips — use translate instead of negative margin to avoid clipping */}
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.9 }}
-                className="absolute left-0 top-1/4 -translate-x-[calc(100%+8px)] bg-[#12121e] border border-cyan-500/30 rounded-2xl px-4 py-3 shadow-xl glow-cyan z-20"
-              >
-                <div className="text-2xl font-black text-cyan-400">90%</div>
-                <div className="text-xs text-gray-400">OCR Accuracy</div>
+              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 to-purple-500/20 rounded-[2.5rem] blur-xl" />
+              <div className="relative w-72 h-80 rounded-[2.5rem] overflow-hidden border border-white/10 bg-gradient-to-br from-white/5 to-white/[0.02]">
+                <img src="/profile.jpg" alt="Vidhya ES" className="w-full h-full object-cover" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} />
+                <div className="absolute inset-0 flex items-center justify-center text-6xl font-black text-white/10 display">VE</div>
+              </div>
+              {/* Floating chips */}
+              <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.8 }}
+                className="absolute -left-12 top-8 bg-[#0f0f1a] border border-cyan-500/20 rounded-2xl px-4 py-3 backdrop-blur-sm">
+                <div className="text-2xl font-black text-cyan-400">87%</div>
+                <div className="text-xs text-gray-400">mAP Score</div>
               </motion.div>
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 1.0 }}
-                className="absolute right-0 bottom-1/4 translate-x-[calc(100%+8px)] bg-[#12121e] border border-purple-500/30 rounded-2xl px-4 py-3 shadow-xl glow-purple z-20"
-              >
-                <div className="text-2xl font-black text-purple-400">6+</div>
+              <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 1.0 }}
+                className="absolute -right-12 bottom-12 bg-[#0f0f1a] border border-purple-500/20 rounded-2xl px-4 py-3 backdrop-blur-sm">
+                <div className="text-2xl font-black text-purple-400">13+</div>
                 <div className="text-xs text-gray-400">AI Projects</div>
               </motion.div>
             </div>
           </motion.div>
         </div>
 
-        {/* Scroll cue */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-gray-600 text-xs">
           <span>Scroll to explore</span>
           <ChevronDown className="w-4 h-4 animate-bounce" />
@@ -331,10 +449,10 @@ export default function Portfolio() {
       {/* ── STATS BAR ──────────────────────────────────────────────────────────── */}
       <section className="border-y border-white/5 bg-white/[0.02] py-12">
         <div className="max-w-4xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-white/5">
-          <StatCard value={90} label="OCR Accuracy" />
-          <StatCard value={89} label="SVM Accuracy (PLACIFY)" />
-          <StatCard value={20} label="Latency Reduction" />
-          <StatCard value={35} label="Placement Efficiency ↑" />
+          <StatCard value={13} label="AI Projects Built" suffix="+" />
+          <StatCard value={87} label="mAP (Robotics Pipeline)" />
+          <StatCard value={4} label="Deployed Applications" suffix="+" />
+          <StatCard value={20} label="Inference Latency Reduction" />
         </div>
       </section>
 
@@ -351,7 +469,6 @@ export default function Portfolio() {
                 </h2>
               </motion.div>
             </div>
-
             <div className="lg:col-span-3 space-y-6 text-gray-300 text-lg leading-relaxed">
               <motion.p {...stagger(0)} className="text-white text-xl font-medium">
                 Aspiring AI/ML Engineer passionate about production-grade Computer Vision and Healthcare NLP systems that solve real-world problems.
@@ -360,10 +477,7 @@ export default function Portfolio() {
                 During my AI/ML Engineering Internship at <span className="text-cyan-400 font-medium">iHub Robotics</span>, I designed and optimized real-time object segmentation pipelines using <span className="text-cyan-400">YOLOv8 + SAM</span>, achieving <span className="text-emerald-400 font-semibold">15% higher segmentation accuracy</span> and <span className="text-emerald-400 font-semibold">20% lower inference latency</span> on 3,000+ annotated images.
               </motion.p>
               <motion.p {...stagger(2)}>
-                I excel at the full ML lifecycle — data annotation, feature engineering, model optimization, and deployment. Key wins: an <span className="text-emerald-400 font-semibold">88% accurate</span> drug interaction detector using BioClinicalBERT and an <span className="text-emerald-400 font-semibold">89% accurate</span> SVM-powered campus recruitment system.
-              </motion.p>
-              <motion.p {...stagger(3)} className="text-cyan-300 font-medium">
-                Currently seeking full-time Computer Vision / AI Engineer roles where I can deliver measurable impact in robotics, healthcare, or intelligent systems.
+                I excel at the full ML lifecycle — from dataset annotation on Roboflow and feature engineering to model optimization and Render deployment. Key wins: a <span className="text-emerald-400 font-semibold">92% accurate</span> medical triage engine and an <span className="text-emerald-400 font-semibold">AUC-ROC 0.91</span> diabetic retinopathy detector.
               </motion.p>
             </div>
           </div>
@@ -377,24 +491,18 @@ export default function Portfolio() {
             <div className="text-xs uppercase tracking-widest text-cyan-400 mb-4">Technical Arsenal</div>
             <h2 className="display text-5xl font-black">Skills & Technologies</h2>
           </motion.div>
-
           <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
             {skills.map((group, i) => (
-              <motion.div
-                key={i}
-                {...stagger(i)}
-                className={`card-hover bg-white/3 border rounded-3xl p-7 ${group.color === 'cyan' ? 'border-cyan-500/10 hover:border-cyan-500/40 hover:glow-cyan' : 'border-purple-500/10 hover:border-purple-500/40 hover:glow-purple'}`}
-              >
+              <motion.div key={i} {...stagger(i)}
+                className={`card-hover bg-white/3 border rounded-3xl p-7 ${group.color === 'cyan' ? 'border-cyan-500/10 hover:border-cyan-500/40' : 'border-purple-500/10 hover:border-purple-500/40'}`}>
                 <div className={`flex items-center gap-3 mb-5 ${group.color === 'cyan' ? 'text-cyan-400' : 'text-purple-400'}`}>
                   {group.icon}
                   <h3 className="font-semibold text-sm uppercase tracking-wider">{group.cat}</h3>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  {group.items.map((skill) => (
-                    <span
-                      key={skill}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${group.color === 'cyan' ? 'bg-cyan-500/5 border-cyan-500/20 text-cyan-300 hover:border-cyan-500/50' : 'bg-purple-500/5 border-purple-500/20 text-purple-300 hover:border-purple-500/50'}`}
-                    >
+                  {group.items.map(skill => (
+                    <span key={skill}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${group.color === 'cyan' ? 'bg-cyan-500/5 border-cyan-500/20 text-cyan-300 hover:border-cyan-500/50' : 'bg-purple-500/5 border-purple-500/20 text-purple-300 hover:border-purple-500/50'}`}>
                       {skill}
                     </span>
                   ))}
@@ -408,67 +516,115 @@ export default function Portfolio() {
       {/* ── PROJECTS ───────────────────────────────────────────────────────────── */}
       <section id="projects" className="py-28">
         <div className="max-w-7xl mx-auto px-6">
-          <motion.div {...fadeUp} className="text-center mb-16">
+          <motion.div {...fadeUp} className="text-center mb-10">
             <div className="text-xs uppercase tracking-widest text-cyan-400 mb-4">Featured Work</div>
             <h2 className="display text-5xl font-black">Projects</h2>
-            <p className="text-gray-400 mt-3">Production-ready AI/ML & Computer Vision systems</p>
+            <p className="text-gray-400 mt-3">13+ production-ready AI/ML & Computer Vision systems</p>
+          </motion.div>
+
+          {/* Filter bar */}
+          <motion.div {...fadeUp} className="flex flex-wrap justify-center gap-3 mb-12">
+            {filters.map(f => (
+              <button key={f} onClick={() => setActiveFilter(f)}
+                className={`filter-btn px-5 py-2 rounded-full text-sm font-medium border ${activeFilter === f ? 'bg-cyan-400 text-black border-cyan-400' : 'border-white/10 text-gray-400 hover:border-white/30 hover:text-white'}`}>
+                {f}
+              </button>
+            ))}
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map((p, i) => (
-              <motion.div
-                key={i}
-                {...stagger(i)}
-                className={`card-hover group relative bg-gradient-to-br from-white/[0.03] to-transparent border rounded-3xl p-8 flex flex-col ${p.color === 'cyan' ? 'border-cyan-500/10 hover:border-cyan-500/40' : 'border-purple-500/10 hover:border-purple-500/40'}`}
-              >
-                {/* Metric badge */}
-                <div className={`absolute top-6 right-6 text-xs px-3 py-1 rounded-full font-semibold ${p.color === 'cyan' ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20' : 'bg-purple-500/10 text-purple-400 border border-purple-500/20'}`}>
-                  {p.metric}
-                </div>
+            {filteredProjects.map((p, i) => {
+              const c = colorMap[p.color] || colorMap.cyan;
+              return (
+                <motion.div key={p.title} {...stagger(i)}
+                  className={`card-hover group relative bg-gradient-to-br from-white/[0.03] to-transparent border rounded-3xl p-8 flex flex-col ${c.border} ${c.hoverBorder} ${c.glow}`}>
+                  <div className={`absolute top-6 right-6 text-xs px-3 py-1 rounded-full font-semibold border ${c.badge}`}>{p.metric}</div>
 
-                <div className={`text-xs uppercase tracking-widest mb-3 ${p.color === 'cyan' ? 'text-cyan-400' : 'text-purple-400'}`}>{p.tag}</div>
-                <h3 className="text-xl font-bold mb-4 leading-snug pr-16">{p.title}</h3>
-                <p className="text-sm text-gray-400 leading-relaxed flex-1">{p.desc}</p>
+                  <div className={`flex items-center gap-2 mb-3 mt-2 ${c.tag}`}>
+                    {p.icon}
+                    <span className="text-xs uppercase tracking-widest">{p.tag}</span>
+                  </div>
+                  <h3 className="text-xl font-bold mb-4 leading-snug pr-4">{p.title}</h3>
+                  <p className="text-sm text-gray-400 leading-relaxed flex-1">{p.desc}</p>
 
-                <div className="flex flex-wrap gap-2 mt-6 mb-6">
-                  {p.stack.map((t) => (
-                    <span key={t} className={`text-xs px-3 py-1 rounded-full border ${p.color === 'cyan' ? 'bg-cyan-950/50 text-cyan-400 border-cyan-500/20' : 'bg-purple-950/50 text-purple-400 border-purple-500/20'}`}>{t}</span>
-                  ))}
-                </div>
+                  <div className="flex flex-wrap gap-2 mt-6 mb-6">
+                    {p.stack.map(t => (
+                      <span key={t} className={`text-xs px-3 py-1 rounded-full border ${c.badge}`}>{t}</span>
+                    ))}
+                  </div>
 
-                <a
-                  href="https://github.com/VidhyaES"
-                  target="_blank"
-                  rel="noreferrer"
-                  className={`inline-flex items-center gap-2 text-sm font-medium transition-colors ${p.color === 'cyan' ? 'text-gray-500 group-hover:text-cyan-400' : 'text-gray-500 group-hover:text-purple-400'}`}
-                >
-                  <Github className="w-4 h-4" /> View on GitHub
-                </a>
-              </motion.div>
-            ))}
+                  <div className="flex items-center gap-4">
+                    <a href={p.github} target="_blank" rel="noreferrer"
+                      className={`inline-flex items-center gap-2 text-sm font-medium transition-colors text-gray-500 ${c.link}`}>
+                      <Github className="w-4 h-4" /> GitHub
+                    </a>
+                    {p.live && (
+                      <a href={p.live} target="_blank" rel="noreferrer"
+                        className={`inline-flex items-center gap-2 text-sm font-medium transition-colors text-gray-500 ${c.link}`}>
+                        <Globe className="w-4 h-4" /> Live Demo
+                      </a>
+                    )}
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
 
           <motion.div {...fadeUp} className="text-center mt-14">
-            <a
-              href="https://github.com/VidhyaES"
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-3 px-10 py-4 border border-white/20 hover:border-cyan-400 rounded-2xl font-medium transition-all hover:bg-white/5"
-            >
+            <a href="https://github.com/VidhyaES" target="_blank" rel="noreferrer"
+              className="inline-flex items-center gap-3 px-10 py-4 border border-white/20 hover:border-cyan-400 rounded-2xl font-medium transition-all hover:bg-white/5">
               View All Projects on GitHub <ExternalLink className="w-5 h-5" />
             </a>
           </motion.div>
         </div>
       </section>
 
+      {/* ── BLOGS ──────────────────────────────────────────────────────────────── */}
+      <section id="blogs" className="py-28 bg-[#0c0c18]">
+        <div className="max-w-7xl mx-auto px-6">
+          <motion.div {...fadeUp} className="text-center mb-16">
+            <div className="text-xs uppercase tracking-widest text-cyan-400 mb-4">Writing</div>
+            <h2 className="display text-5xl font-black">From My Medium</h2>
+            <p className="text-gray-400 mt-3">Sharing what I learn about AI, computer vision & robotics</p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {blogs.map((blog, i) => {
+              const c = colorMap[blog.color] || colorMap.cyan;
+              return (
+                <motion.a key={i} {...stagger(i)} href={blog.url} target="_blank" rel="noreferrer"
+                  className={`blog-card-hover group relative bg-gradient-to-br from-white/[0.03] to-transparent border rounded-3xl p-8 flex flex-col ${c.border} ${c.hoverBorder} ${c.glow} cursor-pointer`}>
+                  <div className="flex items-center justify-between mb-5">
+                    <span className={`text-xs px-3 py-1 rounded-full border font-medium ${c.badge}`}>{blog.tag}</span>
+                    <span className="text-xs text-gray-600">{blog.date}</span>
+                  </div>
+                  <h3 className="text-lg font-bold leading-snug mb-3 flex-1">{blog.title}</h3>
+                  <p className="text-sm text-gray-500 leading-relaxed mb-6">{blog.subtitle}</p>
+                  <div className={`inline-flex items-center gap-2 text-sm font-medium text-gray-500 ${c.link} transition-colors`}>
+                    <MediumIcon /> Read on Medium
+                    <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                  </div>
+                </motion.a>
+              );
+            })}
+          </div>
+
+          <motion.div {...fadeUp} className="text-center mt-14">
+            <a href="https://medium.com/@VidhyaES" target="_blank" rel="noreferrer"
+              className="inline-flex items-center gap-3 px-10 py-4 border border-white/20 hover:border-cyan-400 rounded-2xl font-medium transition-all hover:bg-white/5">
+              Read All Articles on Medium <ExternalLink className="w-5 h-5" />
+            </a>
+          </motion.div>
+        </div>
+      </section>
+
       {/* ── EXPERIENCE ─────────────────────────────────────────────────────────── */}
-      <section id="experience" className="py-28 bg-[#0c0c18]">
+      <section id="experience" className="py-28">
         <div className="max-w-4xl mx-auto px-6">
           <motion.div {...fadeUp} className="mb-16">
             <div className="text-xs uppercase tracking-widest text-cyan-400 mb-4">Work History</div>
             <h2 className="display text-5xl font-black">Experience</h2>
           </motion.div>
-
           <div className="relative pl-8 border-l border-white/10 space-y-16">
             {[
               {
@@ -477,10 +633,10 @@ export default function Portfolio() {
                 company: 'iHub Robotics',
                 location: 'Ernakulam, Kerala',
                 bullets: [
-                  'Developed and optimized ML models for computer vision and NLP applications across internal research prototypes',
+                  'Developed YOLOv8 + SAM real-time object segmentation pipeline for semi-humanoid robots, achieving <span class="text-emerald-400 font-medium">~87% mAP</span>',
                   'Improved model accuracy by <span class="text-emerald-400 font-medium">12%</span> via advanced preprocessing and feature engineering',
                   'Reduced training time by <span class="text-emerald-400 font-medium">18%</span> by restructuring data pipelines and optimizing batch processing',
-                  'Delivered <span class="text-emerald-400 font-medium">2 AI prototypes</span> ready for deployment testing in collaboration with cross-functional teams',
+                  'Annotated 3,000+ images on Roboflow; optimized edge deployment for inference latency reduction',
                 ],
               },
               {
@@ -496,9 +652,7 @@ export default function Portfolio() {
               },
             ].map((exp, i) => (
               <motion.div key={i} {...stagger(i)} className="relative">
-                {/* Timeline dot */}
-                <div className="absolute -left-[2.35rem] top-1.5 w-4 h-4 rounded-full border-2 border-cyan-400 bg-[#0c0c18]" />
-
+                <div className="absolute -left-[2.35rem] top-1.5 w-4 h-4 rounded-full border-2 border-cyan-400 bg-[#080810]" />
                 <div className="text-xs text-gray-500 mb-2 uppercase tracking-widest">{exp.period}</div>
                 <h3 className="text-2xl font-bold">{exp.role}</h3>
                 <div className="text-cyan-400 mb-5">{exp.company} · {exp.location}</div>
@@ -514,7 +668,7 @@ export default function Portfolio() {
       </section>
 
       {/* ── EDUCATION & CERTS ──────────────────────────────────────────────────── */}
-      <section id="education" className="py-28">
+      <section id="education" className="py-28 bg-[#0c0c18]">
         <div className="max-w-4xl mx-auto px-6">
           <motion.div {...fadeUp} className="mb-16">
             <div className="text-xs uppercase tracking-widest text-cyan-400 mb-4">Background</div>
@@ -525,6 +679,8 @@ export default function Portfolio() {
             {[
               { years: '2025 – 2026', degree: 'PG Diploma in AI & Machine Learning', school: 'I Hub School of Learning, Ernakulam' },
               { years: '2021 – 2025', degree: 'B.Tech in Computer Science', school: 'Thejus Engineering College, Thrissur, Kerala' },
+              { years: '2021', degree: 'Higher Secondary Education (Class XII)', school: 'GHSS Erumapetty, Thrissur · 96%' },
+              { years: '2019', degree: 'Secondary Education (Class X)', school: 'SDVHSS Peramangalam, Thrissur · 95%' },
             ].map((ed, i) => (
               <motion.div key={i} {...stagger(i)} className="card-hover bg-white/3 border border-white/10 hover:border-cyan-500/30 rounded-3xl p-8">
                 <div className="text-cyan-400 text-sm mb-3">{ed.years}</div>
@@ -535,13 +691,11 @@ export default function Portfolio() {
           </div>
 
           <motion.div {...fadeUp}>
-            <h3 className="text-2xl font-bold mb-6 flex items-center gap-3">
-              <span className="text-cyan-400 text-3xl">★</span> Certifications
-            </h3>
+            <div className="text-xs uppercase tracking-widest text-cyan-400 mb-6">Certifications</div>
             <div className="grid md:grid-cols-2 gap-6">
               {[
                 { title: 'Advanced Software Engineering Job Simulation', issuer: 'Walmart, USA', desc: 'Simulated real-world software engineering challenges at Walmart scale' },
-                { title: 'Frontend Software Engineering Job Simulation', issuer: 'Skyscanner', desc: 'Hands-on frontend engineering with Skyscanner\'s engineering team' },
+                { title: 'Frontend Software Engineering Job Simulation', issuer: 'Skyscanner', desc: "Hands-on frontend engineering with Skyscanner's engineering team" },
               ].map((cert, i) => (
                 <motion.div key={i} {...stagger(i)} className="card-hover bg-white/3 border border-white/10 hover:border-purple-500/30 rounded-3xl p-8">
                   <div className="flex items-start justify-between gap-4 mb-3">
@@ -549,7 +703,7 @@ export default function Portfolio() {
                       <div className="font-semibold text-lg leading-snug">{cert.title}</div>
                       <div className="text-purple-400 text-sm mt-1">{cert.issuer}</div>
                     </div>
-                    <span className="shrink-0 text-xs px-3 py-1 bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20">Completed</span>
+                    <span className="shrink-0 text-xs px-3 py-1 bg-cyan-500/10 text-cyan-400 rounded-full border border-cyan-500/20">Completed</span>
                   </div>
                   <p className="text-sm text-gray-400">{cert.desc}</p>
                 </motion.div>
@@ -571,32 +725,31 @@ export default function Portfolio() {
               <span className="bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">intelligent systems</span><br />
               together?
             </h2>
-            <p className="text-gray-400 text-lg mb-12">Open to full-time roles in Computer Vision, AI/ML Engineering & Healthcare AI.</p>
+            <p className="text-gray-400 text-lg mb-12">
+              Open to full-time roles in Computer Vision, AI/ML Engineering & Healthcare AI.
+            </p>
           </motion.div>
 
-          <motion.div {...fadeUp} transition={{ delay: 0.2 }} className="flex flex-col md:flex-row gap-4 justify-center">
-            <a
-              href="mailto:vidhyavidhu088@gmail.com"
-              className="flex items-center justify-center gap-3 px-8 py-4 bg-white text-black rounded-2xl font-semibold hover:bg-cyan-400 transition-all hover:scale-105"
-            >
+          {/* Primary CTA */}
+          <motion.div {...fadeUp} transition={{ delay: 0.15 }} className="flex justify-center mb-4">
+            <a href="mailto:vidhyavidhu088@gmail.com"
+              className="flex items-center justify-center gap-3 px-10 py-4 bg-white text-black rounded-2xl font-semibold hover:bg-cyan-400 transition-all hover:scale-105 w-full sm:w-auto">
               <Mail className="w-5 h-5" /> Email Me
             </a>
-            <a
-              href="https://linkedin.com/in/vidhya-es-9946ufg"
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center justify-center gap-3 px-8 py-4 border border-white/20 hover:border-cyan-400 rounded-2xl font-semibold transition-all hover:bg-white/5"
-            >
-              <Linkedin className="w-5 h-5" /> LinkedIn
-            </a>
-            <a
-              href="https://github.com/VidhyaES"
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center justify-center gap-3 px-8 py-4 border border-white/20 hover:border-cyan-400 rounded-2xl font-semibold transition-all hover:bg-white/5"
-            >
-              <Github className="w-5 h-5" /> GitHub
-            </a>
+          </motion.div>
+
+          {/* Secondary links — 2-col on mobile, 3-col on sm+ */}
+          <motion.div {...fadeUp} transition={{ delay: 0.2 }} className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            {[
+              { href: 'https://linkedin.com/in/vidhya-es-9946ufg', icon: <Linkedin className="w-5 h-5" />, label: 'LinkedIn' },
+              { href: 'https://github.com/VidhyaES', icon: <Github className="w-5 h-5" />, label: 'GitHub' },
+              { href: 'https://medium.com/@VidhyaES', icon: <MediumIcon />, label: 'Medium' },
+            ].map((item) => (
+              <a key={item.label} href={item.href} target="_blank" rel="noreferrer"
+                className="flex items-center justify-center gap-2 px-6 py-4 border border-white/20 hover:border-cyan-400 rounded-2xl font-semibold transition-all hover:bg-white/5 text-sm">
+                {item.icon} {item.label}
+              </a>
+            ))}
           </motion.div>
 
           <motion.p {...fadeUp} transition={{ delay: 0.3 }} className="text-gray-600 text-sm mt-10">
