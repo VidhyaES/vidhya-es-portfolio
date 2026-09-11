@@ -30,3 +30,6 @@ Building intelligent vision systems that turn pixels into real-world impact.
 
 **Open to Computer Vision / AI/ML Engineer roles (India & Remote)**  
 📧 vidhyavidhu088@gmail.com | [LinkedIn](https://linkedin.com/in/vidhya-es-9946ufg) | [GitHub](https://github.com/VidhyaES)
+cd path\to\vidhya-es-portfolio
+npm install
+npm run dev

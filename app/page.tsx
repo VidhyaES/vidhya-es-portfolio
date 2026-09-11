@@ -5,7 +5,7 @@ import {
   ArrowRight, Download, Github, Linkedin, Mail, ExternalLink,
   ChevronDown, Zap, Brain, Eye, Code2, BookOpen, ArrowUpRight,
   Globe, Shield, ShoppingCart, GraduationCap, Cpu, Heart,
-  MapPin, Microscope
+  MapPin, Microscope, LineChart, Leaf
 } from 'lucide-react';
 
 // ── Motion presets ────────────────────────────────────────────────────────────
@@ -98,27 +98,80 @@ export default function Portfolio() {
   const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
   const [activeFilter, setActiveFilter] = useState('All');
 
-  const typed = useTypewriter(['Computer Vision', 'AI/ML Engineering', 'NLP & Healthcare AI', 'Robotics Vision']);
+  const typed = useTypewriter(['Computer Vision', 'FMCG Demand Forecasting', 'NLP & Healthcare AI', 'Robotics Vision']);
 
   const skills = [
-    { cat: 'Programming', icon: <Code2 className="w-5 h-5" />, color: 'cyan', items: ['Python', 'Java', 'SQL', 'C'] },
-    { cat: 'Machine Learning', icon: <Brain className="w-5 h-5" />, color: 'purple', items: ['Scikit-learn', 'Random Forest', 'SVM', 'Feature Engineering', 'Classification', 'Regression'] },
+    { cat: 'Programming', icon: <Code2 className="w-5 h-5" />, color: 'cyan', items: ['Python', 'SQL', 'Java', 'C'] },
+    { cat: 'Machine Learning', icon: <Brain className="w-5 h-5" />, color: 'purple', items: ['Scikit-learn', 'LightGBM', 'Random Forest', 'SVM', 'Feature Engineering', 'Classification'] },
     { cat: 'Deep Learning', icon: <Zap className="w-5 h-5" />, color: 'cyan', items: ['PyTorch', 'TensorFlow', 'YOLOv8', 'CNNs', 'Transfer Learning', 'EfficientNet'] },
     { cat: 'Computer Vision', icon: <Eye className="w-5 h-5" />, color: 'purple', items: ['OpenCV', 'SAM', 'COCO', 'Roboflow', 'OCR', 'TrOCR', 'Grad-CAM'] },
-    { cat: 'NLP & LLMs', icon: <Brain className="w-5 h-5" />, color: 'cyan', items: ['BERT', 'BioClinicalBERT', 'spaCy', 'Hugging Face', 'Groq', 'LLaMA', 'Gemini API'] },
-    { cat: 'Deployment', icon: <Code2 className="w-5 h-5" />, color: 'purple', items: ['FastAPI', 'Flask', 'Django', 'React', 'Docker', 'Render', 'Streamlit'] },
+    { cat: 'NLP & LLMs', icon: <Brain className="w-5 h-5" />, color: 'cyan', items: ['BERT', 'BioClinicalBERT', 'spaCy', 'Hugging Face', 'Groq (Llama 4 Scout)', 'Gemini API'] },
+    { cat: 'Forecasting & Data', icon: <LineChart className="w-5 h-5" />, color: 'purple', items: ['Pandas', 'NumPy', 'Time-Series Forecasting', 'Lag/Rolling/EWM Features', 'WMAPE/sMAPE/RMSE', 'ETL'] },
+    { cat: 'Deployment', icon: <Code2 className="w-5 h-5" />, color: 'cyan', items: ['FastAPI', 'Flask', 'Django', 'PostgreSQL', 'Docker', 'JWT Auth', 'Render'] },
   ];
 
   const projects = [
+    {
+      tag: 'ML • FMCG Forecasting',
+      filter: 'ML',
+      color: 'purple',
+      icon: <LineChart className="w-5 h-5" />,
+      title: 'FMCG Demand Forecasting — TCPL/CDE',
+      desc: 'Multi-agent forecasting pipeline at AudvikLabs combining Baseline, Scheme Uplift, and External agents for hierarchical, multi-horizon SKU/depot/channel-level demand forecasts across AGNI, PULSES, and CAPTAIN product lines, built in Python with LightGBM models on lag/rolling/EWM features.',
+      stack: ['Python', 'Pandas', 'NumPy', 'LightGBM', 'Time-Series Forecasting'],
+      metric: 'Multi-agent',
+      github: '',
+      live: '',
+      featured: true,
+    },
+    {
+      tag: 'Computer Vision • Industrial',
+      filter: 'Computer Vision',
+      color: 'cyan',
+      icon: <Leaf className="w-5 h-5" />,
+      title: 'Tea Leaf Quality / Classification',
+      desc: 'Computer vision pipeline at AudvikLabs for  Tea leaf quality classification: a two-stage detect-then-classify architecture using object detection and image classification/segmentation to automate visual grading, with image processing for preprocessing and accuracy gains.',
+      stack: ['Python', 'OpenCV', 'Deep Learning', 'Object Detection', 'Image Segmentation'],
+      metric: 'Industrial CV',
+      github: '',
+      live: '',
+      featured: true,
+    },
+    {
+      tag: 'Computer Vision • Industrial',
+      filter: 'Computer Vision',
+      color: 'purple',
+      icon: <Microscope className="w-5 h-5" />,
+      title: 'Glass Particle Detection & Quality Inspection',
+      desc: 'Industrial computer vision system at AudvikLabs for automated detection of glass-particle contaminants, using deep learning-based object and defect detection plus image enhancement techniques for automated visual inspection in production conditions.',
+      stack: ['Python', 'OpenCV', 'Deep Learning', 'Defect Detection', 'Image Enhancement'],
+      metric: 'Industrial CV',
+      github: '',
+      live: '',
+      featured: true,
+    },
+    {
+      tag: 'Computer Vision • Restaurant Ops',
+      filter: 'Computer Vision',
+      color: 'cyan',
+      icon: <Cpu className="w-5 h-5" />,
+      title: 'Restaurant Intelligence Suite',
+      desc: 'Live computer-vision modules for a multi-branch restaurant management platform at Kalgus Labs: YOLOv8m kitchen hygiene/PPE violation detection over RTSP streams, table occupancy tracking, crowd-density estimation, and directional people counting.',
+      stack: ['YOLOv8m', 'OpenCV', 'FastAPI', 'RTSP'],
+      metric: 'Live deployment',
+      github: '',
+      live: '',
+      featured: true,
+    },
     {
       tag: 'Computer Vision • Retail',
       filter: 'Computer Vision',
       color: 'cyan',
       icon: <ShoppingCart className="w-5 h-5" />,
       title: 'RetailSense – AI Retail Analytics',
-      desc: 'Real-time retail analytics platform using computer vision to track customer footfall, heatmap generation, shelf monitoring, and behavior analysis for smart stores.',
-      stack: ['YOLOv8', 'OpenCV', 'Python', 'Flask', 'React'],
-      metric: 'Real-time',
+      desc: 'Retail intelligence platform combining CV-based footfall, heatmap, and shelf-monitoring analytics with a 4-stage ETL pipeline across 6 PostgreSQL tables and interactive dashboards for inventory and revenue optimization — cut query time from 4.2s to 0.8s.',
+      stack: ['YOLOv8', 'OpenCV', 'PostgreSQL', 'Flask', 'React'],
+      metric: '4.2s → 0.8s query',
       github: 'https://github.com/VidhyaES',
       live: '',
       featured: true,
@@ -134,7 +187,7 @@ export default function Portfolio() {
       metric: '15% ↑ accuracy',
       github: 'https://github.com/VidhyaES/robot-object-segmentation-yolo-sam',
       live: '',
-      featured: true,
+      featured: false,
     },
     {
       tag: 'LLM • Document Security',
@@ -142,9 +195,9 @@ export default function Portfolio() {
       color: 'purple',
       icon: <Shield className="w-5 h-5" />,
       title: 'DocuGuard AI – ID Forgery Detection',
-      desc: 'FastAPI + Groq (Llama 4 Scout 17B) forensic analysis system evaluating 8 dimensions of ID document authenticity. Outputs structured verdict with risk score 0–100. Live on Render.',
+      desc: 'FastAPI + Groq (Llama 4 Scout 17B) forensic document verification system for KYC fraud detection, evaluating 8 structural integrity dimensions and outputting a risk score 0–100 — cutting manual review time from ~8 minutes to under 30 seconds. Live on Render.',
       stack: ['FastAPI', 'Groq Vision', 'LLaMA 4 Scout', 'Python', 'Render'],
-      metric: '8-axis forensics',
+      metric: '8min → 30sec review',
       github: 'https://github.com/VidhyaES/DocuGuardAI',
       live: 'https://docuguardai.onrender.com',
       featured: true,
@@ -181,7 +234,7 @@ export default function Portfolio() {
       color: 'purple',
       icon: <Eye className="w-5 h-5" />,
       title: 'Diabetic Retinopathy Detection',
-      desc: 'EfficientNet-B0 + ResNet50 ensemble for retinal disease detection. Grad-CAM explainability for clinical transparency. AUC-ROC 0.91.',
+      desc: 'EfficientNet-B0 + ResNet50 ensemble for retinal disease detection, benchmarked on APTOS 2019. AUC-ROC 0.91, sensitivity 0.88, specificity 0.89, with Grad-CAM explainability for clinical transparency.',
       stack: ['EfficientNet-B0', 'ResNet50', 'Grad-CAM', 'PyTorch'],
       metric: 'AUC-ROC 0.91',
       github: 'https://github.com/VidhyaES/diabetic-retinopathy-5class-ensemble',
@@ -361,7 +414,7 @@ export default function Portfolio() {
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cyan-500/30 bg-cyan-500/5 text-sm text-cyan-400">
               <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-              Open to Computer Vision Roles
+              AI/ML Engineer @ AudvikLabs · Open to new opportunities
             </motion.div>
 
             <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }}
@@ -377,7 +430,7 @@ export default function Portfolio() {
 
             <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}
               className="text-lg text-gray-400 max-w-lg leading-relaxed">
-              Building vision systems that turn pixels into intelligence — object detection, segmentation, and real-time analytics for robotics & healthcare.
+              Building vision systems and forecasting agents that turn pixels and data into decisions — from object detection and industrial quality inspection to FMCG demand forecasting.
             </motion.p>
 
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
@@ -433,7 +486,7 @@ export default function Portfolio() {
               </motion.div>
               <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 1.0 }}
                 className="absolute -right-12 bottom-12 bg-[#0f0f1a] border border-purple-500/20 rounded-2xl px-4 py-3 backdrop-blur-sm">
-                <div className="text-2xl font-black text-purple-400">13+</div>
+                <div className="text-2xl font-black text-purple-400">17+</div>
                 <div className="text-xs text-gray-400">AI Projects</div>
               </motion.div>
             </div>
@@ -449,9 +502,9 @@ export default function Portfolio() {
       {/* ── STATS BAR ──────────────────────────────────────────────────────────── */}
       <section className="border-y border-white/5 bg-white/[0.02] py-12">
         <div className="max-w-4xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-white/5">
-          <StatCard value={13} label="AI Projects Built" suffix="+" />
+          <StatCard value={17} label="AI Projects Built" suffix="+" />
           <StatCard value={87} label="mAP (Robotics Pipeline)" />
-          <StatCard value={4} label="Deployed Applications" suffix="+" />
+          <StatCard value={5} label="Deployed Applications" suffix="+" />
           <StatCard value={20} label="Inference Latency Reduction" />
         </div>
       </section>
@@ -471,13 +524,16 @@ export default function Portfolio() {
             </div>
             <div className="lg:col-span-3 space-y-6 text-gray-300 text-lg leading-relaxed">
               <motion.p {...stagger(0)} className="text-white text-xl font-medium">
-                Aspiring AI/ML Engineer passionate about production-grade Computer Vision and Healthcare NLP systems that solve real-world problems.
+                AI/ML Engineer passionate about production-grade Computer Vision, FMCG demand forecasting, and Healthcare NLP systems that solve real-world problems.
               </motion.p>
               <motion.p {...stagger(1)}>
-                During my AI/ML Engineering Internship at <span className="text-cyan-400 font-medium">iHub Robotics</span>, I designed and optimized real-time object segmentation pipelines using <span className="text-cyan-400">YOLOv8 + SAM</span>, achieving <span className="text-emerald-400 font-semibold">15% higher segmentation accuracy</span> and <span className="text-emerald-400 font-semibold">20% lower inference latency</span> on 3,000+ annotated images.
+                As an <span className="text-cyan-400 font-medium">AI/ML Engineer at AudvikLabs</span>, I build interconnected Baseline, Scheme Uplift, and External forecasting agents for SKU/depot/channel-level FMCG demand planning, alongside industrial computer-vision systems for <span className="text-cyan-400">Tata Tea leaf grading</span> and glass-particle detection.
               </motion.p>
               <motion.p {...stagger(2)}>
-                I excel at the full ML lifecycle — from dataset annotation on Roboflow and feature engineering to model optimization and Render deployment. Key wins: a <span className="text-emerald-400 font-semibold">92% accurate</span> medical triage engine and an <span className="text-emerald-400 font-semibold">AUC-ROC 0.91</span> diabetic retinopathy detector.
+                Earlier, at <span className="text-cyan-400 font-medium">Kalgus Labs</span> I shipped live restaurant computer-vision modules, and at <span className="text-cyan-400 font-medium">iHub Robotics</span> I designed real-time object segmentation pipelines using <span className="text-cyan-400">YOLOv8 + SAM</span>, achieving <span className="text-emerald-400 font-semibold">15% higher segmentation accuracy</span> and <span className="text-emerald-400 font-semibold">20% lower inference latency</span> on 3,000+ annotated images.
+              </motion.p>
+              <motion.p {...stagger(3)}>
+                I excel at the full ML lifecycle — from dataset annotation and feature engineering to model optimization and deployment. Key wins: a <span className="text-emerald-400 font-semibold">92% accurate</span> medical triage engine and an <span className="text-emerald-400 font-semibold">AUC-ROC 0.91</span> diabetic retinopathy detector.
               </motion.p>
             </div>
           </div>
@@ -519,7 +575,7 @@ export default function Portfolio() {
           <motion.div {...fadeUp} className="text-center mb-10">
             <div className="text-xs uppercase tracking-widest text-cyan-400 mb-4">Featured Work</div>
             <h2 className="display text-5xl font-black">Projects</h2>
-            <p className="text-gray-400 mt-3">13+ production-ready AI/ML & Computer Vision systems</p>
+            <p className="text-gray-400 mt-3">17+ production-ready AI/ML, forecasting & Computer Vision systems</p>
           </motion.div>
 
           {/* Filter bar */}
@@ -553,18 +609,25 @@ export default function Portfolio() {
                     ))}
                   </div>
 
-                  <div className="flex items-center gap-4">
-                    <a href={p.github} target="_blank" rel="noreferrer"
-                      className={`inline-flex items-center gap-2 text-sm font-medium transition-colors text-gray-500 ${c.link}`}>
-                      <Github className="w-4 h-4" /> GitHub
-                    </a>
-                    {p.live && (
-                      <a href={p.live} target="_blank" rel="noreferrer"
-                        className={`inline-flex items-center gap-2 text-sm font-medium transition-colors text-gray-500 ${c.link}`}>
-                        <Globe className="w-4 h-4" /> Live Demo
-                      </a>
-                    )}
-                  </div>
+                  {(p.github || p.live) && (
+                    <div className="flex items-center gap-4">
+                      {p.github && (
+                        <a href={p.github} target="_blank" rel="noreferrer"
+                          className={`inline-flex items-center gap-2 text-sm font-medium transition-colors text-gray-500 ${c.link}`}>
+                          <Github className="w-4 h-4" /> GitHub
+                        </a>
+                      )}
+                      {p.live && (
+                        <a href={p.live} target="_blank" rel="noreferrer"
+                          className={`inline-flex items-center gap-2 text-sm font-medium transition-colors text-gray-500 ${c.link}`}>
+                          <Globe className="w-4 h-4" /> Live Demo
+                        </a>
+                      )}
+                    </div>
+                  )}
+                  {!p.github && !p.live && (
+                    <div className="text-xs text-gray-600 italic">Proprietary — details on request</div>
+                  )}
                 </motion.div>
               );
             })}
@@ -628,8 +691,33 @@ export default function Portfolio() {
           <div className="relative pl-8 border-l border-white/10 space-y-16">
             {[
               {
-                period: 'Oct 2025 – Jan 2026',
-                role: 'AI/ML Engineering Intern',
+                period: 'Jul 2026 – Present',
+                role: 'AI/ML Engineer',
+                company: 'AudvikLabs Private Limited',
+                location: 'Bengaluru',
+                current: true,
+                bullets: [
+                  'Built end-to-end FMCG demand forecasting pipelines in Python (Pandas, NumPy) for hierarchical, multi-horizon SKU/depot/channel-level forecasts across <span class="text-emerald-400 font-medium">Baseline, Scheme Uplift, and External</span> agents',
+                  'Developed and tuned LightGBM-based machine learning models for time-series forecasting across AGNI, CAPTAIN, and PULSES FMCG product categories',
+                  'Engineered lag/rolling/EWM time-series features on hierarchical demand data; analysed WMAPE, sMAPE, MAE, RMSE, and forecast bias',
+                  'Developed a computer vision pipeline (Python, OpenCV, deep learning) for tea leaf quality classification, using object detection and image classification/segmentation to automate visual grading',
+                  'Built an industrial computer vision system (Python, OpenCV) for automated glass-particle contaminant detection, using deep learning-based object/defect detection and image enhancement for automated visual inspection',
+                ],
+              },
+              {
+                period: 'May 2026 – Jun 2026',
+                role: 'AI Engineer Intern',
+                company: 'Kalgus Labs Private Limited',
+                location: 'Ernakulam, Kerala',
+                bullets: [
+                  'Engineered computer-vision solutions for a live, multi-branch restaurant management platform',
+                  'Developed YOLOv8m-based kitchen hygiene/PPE violation detection using RTSP video streams',
+                  'Implemented table occupancy detection, crowd-density estimation, and directional people counting',
+                ],
+              },
+              {
+                period: 'Oct 2025 – Feb 2026',
+                role: 'AI/ML Intern',
                 company: 'iHub Robotics',
                 location: 'Ernakulam, Kerala',
                 bullets: [
@@ -640,9 +728,9 @@ export default function Portfolio() {
                 ],
               },
               {
-                period: 'Feb 2023 – Mar 2023',
+                period: 'Feb 2023 – Apr 2023',
                 role: 'AI Intern',
-                company: 'Aican Automate (Teachnook)',
+                company: 'Teachnook (Teachscape Online Learning Services)',
                 location: 'Remote',
                 bullets: [
                   'Built supervised learning models achieving <span class="text-emerald-400 font-medium">85%+</span> accuracy on structured datasets',
@@ -652,8 +740,8 @@ export default function Portfolio() {
               },
             ].map((exp, i) => (
               <motion.div key={i} {...stagger(i)} className="relative">
-                <div className="absolute -left-[2.35rem] top-1.5 w-4 h-4 rounded-full border-2 border-cyan-400 bg-[#080810]" />
-                <div className="text-xs text-gray-500 mb-2 uppercase tracking-widest">{exp.period}</div>
+                <div className={`absolute -left-[2.35rem] top-1.5 w-4 h-4 rounded-full border-2 ${exp.current ? 'border-cyan-400 bg-cyan-400/30' : 'border-cyan-400 bg-[#080810]'}`} />
+                <div className="text-xs text-gray-500 mb-2 uppercase tracking-widest">{exp.period}{exp.current ? ' · Current' : ''}</div>
                 <h3 className="text-2xl font-bold">{exp.role}</h3>
                 <div className="text-cyan-400 mb-5">{exp.company} · {exp.location}</div>
                 <ul className="space-y-3">
@@ -694,8 +782,12 @@ export default function Portfolio() {
             <div className="text-xs uppercase tracking-widest text-cyan-400 mb-6">Certifications</div>
             <div className="grid md:grid-cols-2 gap-6">
               {[
+                { title: 'Microsoft Azure for AI and Machine Learning', issuer: 'Coursera', desc: 'Applied AI/ML workflows and model deployment on Microsoft Azure' },
                 { title: 'Advanced Software Engineering Job Simulation', issuer: 'Walmart, USA', desc: 'Simulated real-world software engineering challenges at Walmart scale' },
-                { title: 'Frontend Software Engineering Job Simulation', issuer: 'Skyscanner', desc: "Hands-on frontend engineering with Skyscanner's engineering team" },
+                { title: 'Frontend Software Engineering Job Simulation', issuer: 'Skyscanner (Forage)', desc: "Hands-on frontend engineering with Skyscanner's engineering team" },
+                { title: 'Python for Beginners Certification Program', issuer: 'Certification Program', desc: 'Foundational Python programming certification' },
+                { title: 'Google Flutter & Dart Certification Program', issuer: 'Certification Program', desc: 'Cross-platform app development with Flutter & Dart' },
+                { title: 'C, C++ and PHP: Comprehensive Programming Bootcamp', issuer: 'Bootcamp', desc: 'Core programming fundamentals across C, C++, and PHP' },
               ].map((cert, i) => (
                 <motion.div key={i} {...stagger(i)} className="card-hover bg-white/3 border border-white/10 hover:border-purple-500/30 rounded-3xl p-8">
                   <div className="flex items-start justify-between gap-4 mb-3">
@@ -726,7 +818,7 @@ export default function Portfolio() {
               together?
             </h2>
             <p className="text-gray-400 text-lg mb-12">
-              Open to full-time roles in Computer Vision, AI/ML Engineering & Healthcare AI.
+              Currently building forecasting & vision systems at AudvikLabs — always open to new opportunities in Computer Vision, AI/ML Engineering & Healthcare AI.
             </p>
           </motion.div>
 
@@ -753,7 +845,7 @@ export default function Portfolio() {
           </motion.div>
 
           <motion.p {...fadeUp} transition={{ delay: 0.3 }} className="text-gray-600 text-sm mt-10">
-            vidhyavidhu088@gmail.com · Ernakulam, Kerala
+            vidhyavidhu088@gmail.com · Bengaluru, India
           </motion.p>
         </div>
       </section>
