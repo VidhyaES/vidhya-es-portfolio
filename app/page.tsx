@@ -452,7 +452,7 @@ export default function Portfolio() {
               <a href="mailto:vidhyavidhu088@gmail.com" className="p-3 rounded-xl border border-white/10 hover:border-cyan-400/50 hover:bg-white/5 transition-all" aria-label="Email">
                 <Mail className="w-5 h-5 text-gray-400 hover:text-cyan-400 transition-colors" />
               </a>
-              <a href="https://linkedin.com/in/vidhya-es-9946ufg" target="_blank" rel="noreferrer" className="p-3 rounded-xl border border-white/10 hover:border-cyan-400/50 hover:bg-white/5 transition-all" aria-label="LinkedIn">
+              <a href="https://www.linkedin.com/in/vidhya-es/" target="_blank" rel="noreferrer" className="p-3 rounded-xl border border-white/10 hover:border-cyan-400/50 hover:bg-white/5 transition-all" aria-label="LinkedIn">
                 <Linkedin className="w-5 h-5 text-gray-400 hover:text-cyan-400 transition-colors" />
               </a>
               <a href="https://github.com/VidhyaES" target="_blank" rel="noreferrer" className="p-3 rounded-xl border border-white/10 hover:border-cyan-400/50 hover:bg-white/5 transition-all" aria-label="GitHub">
@@ -833,7 +833,7 @@ export default function Portfolio() {
           {/* Secondary links — 2-col on mobile, 3-col on sm+ */}
           <motion.div {...fadeUp} transition={{ delay: 0.2 }} className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {[
-              { href: 'https://linkedin.com/in/vidhya-es-9946ufg', icon: <Linkedin className="w-5 h-5" />, label: 'LinkedIn' },
+              { href: 'https://www.linkedin.com/in/vidhya-es/', icon: <Linkedin className="w-5 h-5" />, label: 'LinkedIn' },
               { href: 'https://github.com/VidhyaES', icon: <Github className="w-5 h-5" />, label: 'GitHub' },
               { href: 'https://medium.com/@VidhyaES', icon: <MediumIcon />, label: 'Medium' },
             ].map((item) => (
