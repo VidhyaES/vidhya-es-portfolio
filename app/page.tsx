@@ -116,7 +116,7 @@ export default function Portfolio() {
       filter: 'ML',
       color: 'purple',
       icon: <LineChart className="w-5 h-5" />,
-      title: 'FMCG Demand Forecasting — TCPL/CDE',
+      title: 'FMCG Demand Forecasting',
       desc: 'Multi-agent forecasting pipeline at AudvikLabs combining Baseline, Scheme Uplift, and External agents for hierarchical, multi-horizon SKU/depot/channel-level demand forecasts across AGNI, PULSES, and CAPTAIN product lines, built in Python with LightGBM models on lag/rolling/EWM features.',
       stack: ['Python', 'Pandas', 'NumPy', 'LightGBM', 'Time-Series Forecasting'],
       metric: 'Multi-agent',
@@ -130,7 +130,7 @@ export default function Portfolio() {
       color: 'cyan',
       icon: <Leaf className="w-5 h-5" />,
       title: 'Tea Leaf Quality / Classification',
-      desc: 'Computer vision pipeline at AudvikLabs for  Tea leaf quality classification: a two-stage detect-then-classify architecture using object detection and image classification/segmentation to automate visual grading, with image processing for preprocessing and accuracy gains.',
+      desc: 'Computer vision pipeline at AudvikLabs for Tea leaf quality classification: a two-stage detect-then-classify architecture using object detection and image classification/segmentation to automate visual grading, with image processing for preprocessing and accuracy gains.',
       stack: ['Python', 'OpenCV', 'Deep Learning', 'Object Detection', 'Image Segmentation'],
       metric: 'Industrial CV',
       github: '',
@@ -527,7 +527,7 @@ export default function Portfolio() {
                 AI/ML Engineer passionate about production-grade Computer Vision, FMCG demand forecasting, and Healthcare NLP systems that solve real-world problems.
               </motion.p>
               <motion.p {...stagger(1)}>
-                As an <span className="text-cyan-400 font-medium">AI/ML Engineer at AudvikLabs</span>, I build interconnected Baseline, Scheme Uplift, and External forecasting agents for SKU/depot/channel-level FMCG demand planning, alongside industrial computer-vision systems for <span className="text-cyan-400">Tata Tea leaf grading</span> and glass-particle detection.
+                As an <span className="text-cyan-400 font-medium">AI/ML Engineer at AudvikLabs</span>, I build interconnected Baseline, Scheme Uplift, and External forecasting agents for SKU/depot/channel-level FMCG demand planning, alongside industrial computer-vision systems for <span className="text-cyan-400"> Tea leaf grading</span> and glass-particle detection.
               </motion.p>
               <motion.p {...stagger(2)}>
                 Earlier, at <span className="text-cyan-400 font-medium">Kalgus Labs</span> I shipped live restaurant computer-vision modules, and at <span className="text-cyan-400 font-medium">iHub Robotics</span> I designed real-time object segmentation pipelines using <span className="text-cyan-400">YOLOv8 + SAM</span>, achieving <span className="text-emerald-400 font-semibold">15% higher segmentation accuracy</span> and <span className="text-emerald-400 font-semibold">20% lower inference latency</span> on 3,000+ annotated images.
